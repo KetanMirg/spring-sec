@@ -3,14 +3,19 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:security="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
-<security:http auto-config="true"  use-expressions="false">
+
+<security:http auto-config="true"  use-expressions="false"  >
 <!-- <security:csrf disabled="true"/> -->
-<security:http-basic/> <!-- commenting http:basic -->
-<!-- <security:form-login login-page="/formlogin" login-processing-url="/formlogin" username-parameter="user_param" password-parameter="pswd_param"/> -->
-	<security:intercept-url pattern="/appointments" access="ROLE_APP)"/> <!-- /* pattern after the url is very important -->
-	<security:intercept-url pattern="/search" access="ROLE_SEARCH"/>
+<!-- <security:form-login/> --> <!-- commenting http:basic -->
+<!-- login-processing-url="/j_spring_security_check" -->
+<!-- <security:intercept-url pattern="/login/*" access="permitAll"/> -->
+<!-- username-parameter="user_param" password-parameter="pswd_param" login-processing-url="/login" always-use-default-target="true" default-target-url="/success"-->
+
+<security:form-login login-page="/formlogin" login-processing-url="/login" authentication-failure-url="/login?error=true" always-use-default-target="true" default-target-url="/appointments" username-parameter="custom_username" password-parameter="custom_password" />
+	<security:intercept-url pattern="/appointments" access="ROLE_SEARCH"/> <!-- /* pattern after the url is very important -->
+	<security:intercept-url pattern="/search"  access="ROLE_SEARCH" />
 	<security:intercept-url pattern="/home" access="ROLE_SEARCH"/>
 	<security:intercept-url pattern="/**" access="ROLE_ANONYMOUS"/> <!-- This is declared as the last tag - Once Dispatcher Servlet finds the pattern it doesn't look further  ROLE_ANONYMOUS is for allowing all users to acces this url pattern-->
 </security:http>
@@ -18,12 +23,15 @@
 <security:authentication-manager>
 	<security:authentication-provider>
 	<security:user-service>
-		<security:user name="app" password="{noop}password" authorities="hasRole('ROLE_APP')"></security:user>
-		<security:user name="search" password="{noop}pass" authorities="ROLE_SEARCH"></security:user>
+		<security:user name="app" password="password" authorities="ROLE_APP"></security:user>
+		<security:user name="search" password="pass" authorities="ROLE_SEARCH"></security:user>
 		<security:user name="admin" password="{noop}pswd" authorities="ROLE_APP,ROLE_SEARCH"></security:user>
 	</security:user-service>
-	</security:authentication-provider>
+	</security:authentication-provider> 
 </security:authentication-manager>
+
+<!-- <bean id="customAuthenticationProvider" class="com.spring.security.CustomAuthenticationProvider">
+</bean> -->
 
 
 </beans>

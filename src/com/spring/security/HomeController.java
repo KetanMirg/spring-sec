@@ -38,7 +38,12 @@ public class HomeController {
 	
 	@RequestMapping("/login")
 	public String goLogin(){
-		return "login";
+		return "formlogin";
+	}
+	
+	@RequestMapping("/success")
+	public String goSuccess(){
+		return "success";
 	}
 	
 	@RequestMapping(value="/",method=RequestMethod.GET)
